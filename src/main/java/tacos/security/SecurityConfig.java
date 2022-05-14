@@ -29,11 +29,15 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/design", "/orders").hasRole("USER")
                 .antMatchers("/", "/**").permitAll()
+
                 .and().formLogin().loginPage("/login")
+
                 .defaultSuccessUrl("/design", true)
+
+                .and().logout().logoutSuccessUrl("/")
+
                 .and().build();
     }
-
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder encoder) {

@@ -3,20 +3,27 @@ package tacos.dto;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Data
-public class TacoOrder {
+@Entity
+public class TacoOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Date placedAt;
+
+    private Date placedAt = new Date();
 
     @NotBlank(message = "Delivery name is required")
     private String deliveryName;
@@ -45,6 +52,7 @@ public class TacoOrder {
     @Size(min = 3, message = "CVV must be 3 digits long")
     private String ccCVV;
 
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Taco> tacos = new ArrayList<>();
 
     public void addTaco(Taco taco) {
